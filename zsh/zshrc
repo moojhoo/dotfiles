@@ -1,0 +1,59 @@
+#export ZPLUG_HOME="~/.config/zplug"
+
+source ~/.zplug/init.zsh
+
+zplug "zsh-users/zsh-history-substring-search"
+
+zplug "plugins/git",   from:oh-my-zsh, as:plugin
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "chrissicool/zsh-256color"
+zplug "mafredri/zsh-async"
+zplug "supercrabtree/k"
+zplug "marzocchi/zsh-notify"
+zplug "clvv/fasd", as:command
+zplug "mollifier/anyframe"
+zplug "junegunn/fzf", use:shell/key-bindings.zsh
+#zplug "b4b4r07/enhancd", use:init.sh
+#zplug "motemen/ghq", hook-build:"make;make install"
+
+# prompt
+zplug "sindresorhus/pure"
+
+# Can manage local plugins
+zplug "~/.zsh", from:local
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
+
+alias vi='nvim'
+
+export GOROOT=/usr/local/go
+export GOPATH="$HOME/go"
+export FZF_DEFAULT_COMMAND='ag -l -g ""' # Use ag as the default source for fzf
+export LANG=en_US.UTF-8
+export GHQ_ROOT='~/workspace/prj'
+
+#if zplug check zsh-users/zsh-autosuggestions; then
+#    echo "test"
+#fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+mkcscope() {
+    rm -rf cscope.files cscope.files
+    find . \( -name '*.c' -o -name '*.cpp' -o -name '*.cc' -o -name '*.h' \) -print > cscope.files
+    cscope -i cscope.files
+}
