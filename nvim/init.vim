@@ -289,7 +289,7 @@ let GtagsCscope_Quiet = 0
 let g:indent_guides_enable_on_vim_startup = 0
 
 "===============================================================================
-" YouCompleteMe 
+" YouCompleteMe
 "===============================================================================
 "map <F3> :YcmCompleter GoTo<CR>
 
