@@ -1,5 +1,4 @@
-
-"" Basic """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"== Basic ======================================================================
 syntax on
 syntax enable
 
@@ -19,7 +18,6 @@ set smarttab
 set backspace=eol,start,indent
 set ignorecase
 set smartcase
-"set gdefault " apply global automatically"
 set cmdheight=2
 set mouse=c
 set cursorline
@@ -35,18 +33,19 @@ set guifont=Consolas\ 10
 let mapleader = ','
 let g:mapleader = ','
 
-"" Last Position """""""""""""""""""""""""""""""""""""""""""""""""""""
+"== Last Position ==============================================================
 autocmd BufReadPost *
 			\ if line("'\"") > 0 && line("'\"") <= line("$") |
 			\   exe "normal! g`\"" |
 			\ endif
 
-"" Easier split navigations """"""""""""""""""""""""""""""""""""""""""
+"== Easier split navigations ===================================================
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+"== Plugins ====================================================================
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -91,7 +90,6 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Yggdroot/vim-mark'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-peekaboo'
-Plug 'vim-scripts/cscope.vim'
 Plug 'mhinz/vim-galore'
 Plug 'nhooyr/neoman.vim'
 Plug 'Shougo/neco-vim'
@@ -103,6 +101,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'wesleyche/SrcExpl'
+Plug 'vimwiki/vimwiki'
 
 "" Colorschemes
 Plug 'romainl/Apprentice'
@@ -111,35 +110,25 @@ Plug 'morhetz/gruvbox'
 
 " candidate
 Plug 'zchee/deoplete-clang'
-"Plug 'benmills/vimux'
-"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer' }
-"Plug 'ryanoasis/nerd-fonts'
-"Plug 'xolox/vim-easytags'
-"Plug 'vim-scripts/cscope_macros.vim'
+Plug 'vim-scripts/cscope_macros.vim'
 "
 " Add plugins to &runtimepath
 call plug#end()
 
-"" Colors """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"== Colors =====================================================================
 set background=dark
 let g:seoul256_background = 236
 colo seoul256
-"colo gruvbox
 
-"" Tags """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"== Tags =======================================================================
 set tagstack
-"set cscopetag
-"set tags="./tags;,tags"
+set nocscopetag
 
 "===============================================================================
 " Deoplete
 "===============================================================================
 
 let g:deoplete#enable_at_startup = 1
-
-
-let g:clang_complete_auto = 0
 
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
 let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
@@ -185,8 +174,8 @@ let g:unite_winheight = 25
 " custom ignore pattern
 call unite#custom#source('file_rec,file_rec/async',
       \ 'ignore_pattern', join([
-        \ '\.bzr\/',
-        \ '\.git\/',
+      \ '\.bzr\/',
+      \ '\.git\/',
       \ ], '\|'))
 
 " fuzzy matcher and sort everything
@@ -206,10 +195,6 @@ nnoremap <silent> <space>o :<C-u>Unite -buffer-name=outline -vertical outline<CR
 nnoremap <silent> <space>m :<C-u>Unite -buffer-name=mru file_mru<CR>
 nnoremap <silent> <space>gd :<C-u>Unite -buffer-name=gtags gtags/def<CR>
 nnoremap <silent> <space>gr :<C-u>Unite -buffer-name=gtags gtags/ref<CR>
-
-" Fuzzy search from current buffer
-" nnoremap <silent> [unite]b :<C-u>UniteWithBufferDir
-" \ -buffer-name=files -prompt=%\  buffer file_mru bookmark file<CR>
 
 " Quick commands
 nnoremap <silent> <space>; :<C-u>Unite -buffer-name=history -default-action=edit history/command command<CR>
@@ -289,30 +274,47 @@ let GtagsCscope_Quiet = 0
 let g:indent_guides_enable_on_vim_startup = 0
 
 "===============================================================================
-" YouCompleteMe
+" Gutentags
 "===============================================================================
-"map <F3> :YcmCompleter GoTo<CR>
+let g:gutentags_project_root = ['.mprj']
+let g:gutentags_add_default_project_roots = 1
 
+"===============================================================================
+" EasyAlign
 "===============================================================================
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+"===============================================================================
+" Lightline
+"===============================================================================
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ }
 
+"===============================================================================
+" Cscope
+"===============================================================================
+function! LoadCscope()
+  let db = findfile("cscope.out", ".;")
+  if (!empty(db))
+    let path = strpart(db, 0, match(db, "/cscope.out$"))
+    set nocscopeverbose " suppress 'duplicate connection' error
+    exe "cs add " . db . " " . path
+    set cscopeverbose
+  endif
+endfunction
+au BufEnter /* call LoadCscope()
+
+"===============================================================================
 set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:␣
 set showbreak=↪
 
-"" coming home to vim """""""""""""""""""""""""""
-"turn off vim default regex
-"nnoremap / /\v
-"vnoremap / /\v
+" coming home to vim
 nnoremap <leader><space> :noh<cr>
 nnoremap <tab> %
 vnoremap <tab> %
@@ -350,21 +352,7 @@ set pastetoggle=<F2>
 set wildmode=longest,list,full
 set wildmenu
 
-
-    " s: Find this C symbol
-    nnoremap  <leader>fs :call cscope#find('s', expand('<cword>'))<CR>
-    " g: Find this definition
-    nnoremap  <leader>fg :call cscope#find('g', expand('<cword>'))<CR>
-    " d: Find functions called by this function
-    nnoremap  <leader>fd :call cscope#find('d', expand('<cword>'))<CR>
-    " c: Find functions calling this function
-    nnoremap  <leader>fc :call cscope#find('c', expand('<cword>'))<CR>
-    " t: Find this text string
-    nnoremap  <leader>ft :call cscope#find('t', expand('<cword>'))<CR>
-    " e: Find this egrep pattern
-    nnoremap  <leader>fe :call cscope#find('e', expand('<cword>'))<CR>
-    " f: Find this file
-    nnoremap  <leader>ff :call cscope#find('f', expand('<cword>'))<CR>
-    " i: Find files #including this file
-    nnoremap  <leader>fi :call cscope#find('i', expand('<cword>'))<CR>
-
+nnoremap <leader>tn :tnext<CR>
+nnoremap <leader>tp :tprev<CR>
+nnoremap <leader>Tn :tabnext<CR>
+nnoremap <leader>Tp :tabprev<CR>
