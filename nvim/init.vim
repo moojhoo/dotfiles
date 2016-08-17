@@ -21,6 +21,7 @@ set smartcase
 set cmdheight=2
 set mouse=c
 set cursorline
+set noswapfile
 
 set shiftwidth=4
 set tabstop=4
@@ -35,9 +36,9 @@ let g:mapleader = ','
 
 "== Last Position ==============================================================
 autocmd BufReadPost *
-			\ if line("'\"") > 0 && line("'\"") <= line("$") |
-			\   exe "normal! g`\"" |
-			\ endif
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
 
 "== Easier split navigations ===================================================
 nnoremap <C-J> <C-W><C-J>
@@ -66,14 +67,11 @@ Plug 'easymotion/vim-easymotion'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'kshenoy/vim-signature'
 Plug 'Shougo/unite.vim'
-Plug 'Shougo/neomru.vim'
 Plug 'hewes/unite-gtags'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-sleuth'
 Plug 'Shougo/unite-outline'
 Plug 'Shougo/neoyank.vim'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/unite-build'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
@@ -97,11 +95,19 @@ Plug 'Shougo/neco-syntax'
 Plug 'ryanoasis/nerd-fonts'
 Plug 'ryanss/vim-hackernews'
 Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'wesleyche/SrcExpl'
 Plug 'vimwiki/vimwiki'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'mileszs/ack.vim'
+Plug 'junegunn/vim-pseudocl'
+Plug 'junegunn/vim-oblique'
+Plug 'lvht/fzf-mru'
+Plug 'tpope/vim-commentary'
 
 "" Colorschemes
 Plug 'romainl/Apprentice'
@@ -110,7 +116,6 @@ Plug 'morhetz/gruvbox'
 
 " candidate
 Plug 'zchee/deoplete-clang'
-Plug 'vim-scripts/cscope_macros.vim'
 "
 " Add plugins to &runtimepath
 call plug#end()
@@ -173,10 +178,10 @@ let g:unite_winheight = 25
 
 " custom ignore pattern
 call unite#custom#source('file_rec,file_rec/async',
-      \ 'ignore_pattern', join([
-      \ '\.bzr\/',
-      \ '\.git\/',
-      \ ], '\|'))
+    \ 'ignore_pattern', join([
+    \ '\.bzr\/',
+    \ '\.git\/',
+    \ ], '\|'))
 
 " fuzzy matcher and sort everything
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -192,7 +197,6 @@ let g:unite_source_history_yank_enable = 1
 " General fuzzy search
 nnoremap <silent> <space>y :<C-u>Unite -buffer-name=yanks history/yank<CR>
 nnoremap <silent> <space>o :<C-u>Unite -buffer-name=outline -vertical outline<CR>
-nnoremap <silent> <space>m :<C-u>Unite -buffer-name=mru file_mru<CR>
 nnoremap <silent> <space>gd :<C-u>Unite -buffer-name=gtags gtags/def<CR>
 nnoremap <silent> <space>gr :<C-u>Unite -buffer-name=gtags gtags/ref<CR>
 
@@ -203,9 +207,8 @@ nnoremap <silent> <space>; :<C-u>Unite -buffer-name=history -default-action=edit
 " Custom Unite settings
 autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
-"	nmap <buffer> <ESC> <Plug>(unite_exit)
-	nmap <buffer> <ESC> <Plug>(unite_insert_enter)
-	imap <buffer> <ESC> <Plug>(unite_exit)
+  nmap <buffer> <ESC> <Plug>(unite_insert_enter)
+  imap <buffer> <ESC> <Plug>(unite_exit)
 endfunction
 
 
@@ -235,11 +238,12 @@ nnoremap <silent> <space>?       :History<CR>
 nnoremap <silent> <space>hs      :History/<CR>
 nnoremap <silent> <space>hc      :History:<CR>
 nnoremap <silent> <space>/       :execute 'Ag ' . input('Ag/')<CR>
-nnoremap <silent> K            :call SearchWordWithAg()<CR>
-vnoremap <silent> K            :call SearchVisualSelectionWithAg()<CR>
+nnoremap <silent> K              :call SearchWordWithAg()<CR>
+vnoremap <silent> K              :call SearchVisualSelectionWithAg()<CR>
 nnoremap <silent> <space>C       :Commits<CR>
 nnoremap <silent> <space>c       :BCommits<CR>
-nnoremap <silent> <space>m       :Marks<CR>
+nnoremap <silent> <space>m       :FZFMru<CR>
+nnoremap <silent> <space>M       :Marks<CR>
 "nnoremap <silent> <space>ft :Filetypes<CR>
 
 imap <C-x><C-f> <plug>(fzf-complete-file-ag)
@@ -292,8 +296,8 @@ nmap ga <Plug>(EasyAlign)
 " Lightline
 "===============================================================================
 let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ }
+    \ 'colorscheme': 'seoul256',
+    \ }
 
 "===============================================================================
 " Cscope
@@ -308,6 +312,17 @@ function! LoadCscope()
   endif
 endfunction
 au BufEnter /* call LoadCscope()
+
+"===============================================================================
+" Ack
+"===============================================================================
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+"===============================================================================
+" Ultisnips
+"===============================================================================
 
 "===============================================================================
 set list
@@ -352,7 +367,7 @@ set pastetoggle=<F2>
 set wildmode=longest,list,full
 set wildmenu
 
-nnoremap <leader>tn :tnext<CR>
-nnoremap <leader>tp :tprev<CR>
-nnoremap <leader>Tn :tabnext<CR>
-nnoremap <leader>Tp :tabprev<CR>
+nnoremap tn :tnext<CR>
+nnoremap tp :tprev<CR>
+nnoremap Tn :tabnext<CR>
+nnoremap Tp :tabprev<CR>

@@ -47,6 +47,7 @@ export GOPATH="$HOME/go"
 export FZF_DEFAULT_COMMAND='ag -l -g ""' # Use ag as the default source for fzf
 export LANG=en_US.UTF-8
 export GHQ_ROOT='~/workspace/prj'
+export PATH=$GOROOT/bin:$PATH
 
 #if zplug check zsh-users/zsh-autosuggestions; then
 #    echo "test"
