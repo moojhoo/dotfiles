@@ -142,9 +142,6 @@ let g:deoplete#sources#clang#std#cpp = 'c++1z'
 let g:deoplete#sources#clang#sort_algo = 'priority'
 
 
-nmap <F7> :SrcExplToggle<CR>
-nmap <F8> :TagbarToggle<CR>
-nmap <F9> :NERDTreeToggle<CR>
 
 "===============================================================================
 " Fugitive
@@ -325,6 +322,17 @@ endif
 "===============================================================================
 
 "===============================================================================
+" Tagbar
+"===============================================================================
+
+let g:tagbar_width = 60
+
+"===============================================================================
+
+nmap <F7> :SrcExplToggle<CR>
+nmap <F8> :TagbarToggle<CR>
+nmap <F9> :NERDTreeToggle<CR>
+
 set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:␣
 set showbreak=↪
