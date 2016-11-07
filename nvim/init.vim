@@ -53,7 +53,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'benekastah/neomake'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'sheerun/vim-polyglot'
 Plug 'ntpeters/vim-better-whitespace'
@@ -92,7 +92,6 @@ Plug 'mhinz/vim-galore'
 Plug 'nhooyr/neoman.vim'
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
-Plug 'ryanoasis/nerd-fonts'
 Plug 'ryanss/vim-hackernews'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -108,6 +107,20 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'lvht/fzf-mru'
 Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-rooter'
+Plug 'tpope/vim-dispatch'
+Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && xbuild' }
+Plug 'astralhpi/deoplete-omnisharp'
+
+Plug 'KabbAmine/zeavim.vim', {'on': [
+            \   'Zeavim', 'Docset',
+            \   '<Plug>Zeavim',
+            \   '<Plug>ZVVisSelection',
+            \   '<Plug>ZVKeyDocset',
+            \   '<Plug>ZVMotion'
+            \ ]}
+Plug 'editorconfig/editorconfig-vim'
+Plug 'moll/vim-node'
 
 "" Colorschemes
 Plug 'romainl/Apprentice'
@@ -140,8 +153,6 @@ let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
 let g:deoplete#sources#clang#std#c = 'c11'
 let g:deoplete#sources#clang#std#cpp = 'c++1z'
 let g:deoplete#sources#clang#sort_algo = 'priority'
-
-
 
 "===============================================================================
 " Fugitive
@@ -327,6 +338,18 @@ endif
 
 let g:tagbar_width = 60
 
+"===============================================================================
+" Rooter
+"===============================================================================
+let g:rooter_manual_only = 1
+let g:rooter_use_lcd = 1
+"===============================================================================
+"
+"===============================================================================
+" OmniSharp
+"===============================================================================
+let g:OmniSharp_server_type = 'v1'
+let g:OmniSharp_server_type = 'roslyn'
 "===============================================================================
 
 nmap <F7> :SrcExplToggle<CR>
