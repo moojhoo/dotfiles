@@ -77,7 +77,6 @@ Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-go', { 'do': 'make'}
 Plug 'zchee/deoplete-jedi'
 Plug 'wellle/tmux-complete.vim'

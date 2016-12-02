@@ -129,6 +129,11 @@ if [ ! -e ~/.git-prompt.sh ]; then
   curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
 fi
 
+if [ ! -d ~/.bash_it ]; then
+  git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+  ~/.bash_it/install.sh --no-modify-config
+fi
+
 if [ "$PLATFORM" = Linux ]; then
   PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\h\[\e[1;30m\]:"
   PS1="$PS1\[\e[0;38m\]\w\[\e[1;35m\]> \[\e[0m\]"
@@ -389,3 +394,7 @@ bind '"\C-g\C-r": "$(gr)\e\C-e\er"'
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 alias tmux="tmux -2"
+
+# Path to the bash it configuration
+export BASH_IT="/home/mok/.bash_it"
+source $BASH_IT/bash_it.sh
