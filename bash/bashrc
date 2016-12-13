@@ -398,3 +398,9 @@ alias tmux="tmux -2"
 # Path to the bash it configuration
 export BASH_IT="/home/mok/.bash_it"
 source $BASH_IT/bash_it.sh
+
+mkcscope() {
+    rm -rf cscope.files cscope.files
+    find . \( -name '*.c' -o -name '*.cpp' -o -name '*.cc' -o -name '*.h' \) -print > cscope.files
+    cscope -i cscope.files
+}

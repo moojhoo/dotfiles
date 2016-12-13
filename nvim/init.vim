@@ -234,6 +234,8 @@ endif
 " FZF
 "===============================================================================
 
+command! -bang -nargs=* Agw call fzf#vim#ag(<q-args>, '-w', <bang>0)
+
 nnoremap <silent> <space><space> :Files<CR>
 nnoremap <silent> <space>a       :Buffers<CR>
 nnoremap <silent> <space>A       :Windows<CR>
@@ -245,7 +247,7 @@ nnoremap <silent> <space>?       :History<CR>
 nnoremap <silent> <space>hs      :History/<CR>
 nnoremap <silent> <space>hc      :History:<CR>
 nnoremap <silent> <space>/       :execute 'Ag ' . input('Ag/')<CR>
-nnoremap <silent> K              :call SearchWordWithAg()<CR>
+nnoremap <silent> K              :call SearchWordWithAgW()<CR>
 vnoremap <silent> K              :call SearchVisualSelectionWithAg()<CR>
 nnoremap <silent> <space>C       :Commits<CR>
 nnoremap <silent> <space>c       :BCommits<CR>
@@ -258,6 +260,10 @@ imap <C-x><C-l> <plug>(fzf-complete-line)
 
 function! SearchWordWithAg()
   execute 'Ag' expand('<cword>')
+endfunction
+
+function! SearchWordWithAgW()
+  execute 'Agw' expand('<cword>')
 endfunction
 
 function! SearchVisualSelectionWithAg() range
@@ -319,6 +325,15 @@ function! LoadCscope()
   endif
 endfunction
 au BufEnter /* call LoadCscope()
+
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 "===============================================================================
 " Ack
@@ -399,5 +414,5 @@ set wildmenu
 
 nnoremap tn :tnext<CR>
 nnoremap tp :tprev<CR>
-nnoremap Tn :tabnext<CR>
-nnoremap Tp :tabprev<CR>
+nnoremap ]n :tabnext<CR>
+nnoremap [p :tabprev<CR>
