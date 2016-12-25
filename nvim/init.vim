@@ -32,6 +32,7 @@ set encoding=utf-8
 set guifont=Consolas\ 10
 
 set laststatus=2
+set showtabline=2
 
 let mapleader = ','
 let g:mapleader = ','
@@ -110,8 +111,8 @@ Plug 'lvht/fzf-mru'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-dispatch'
-Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && xbuild' }
-Plug 'astralhpi/deoplete-omnisharp'
+Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd omnisharp-roslyn && ./build.sh' }
+"Plug 'astralhpi/deoplete-omnisharp'
 
 Plug 'KabbAmine/zeavim.vim', {'on': [
             \   'Zeavim', 'Docset',
@@ -122,7 +123,7 @@ Plug 'KabbAmine/zeavim.vim', {'on': [
             \ ]}
 Plug 'editorconfig/editorconfig-vim'
 Plug 'moll/vim-node'
-Plug 'bling/vim-bufferline'
+Plug 'taohex/lightline-buffer'
 
 "" Colorschemes
 Plug 'romainl/Apprentice'
@@ -131,6 +132,7 @@ Plug 'morhetz/gruvbox'
 
 " candidate
 Plug 'zchee/deoplete-clang'
+"Plug 'Valloric/YouCompleteMe'
 "
 " Add plugins to &runtimepath
 call plug#end()
@@ -315,10 +317,13 @@ let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'mode_map': { 'c': 'NORMAL' },
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], [ 'tagbar' ] ]
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ]]
       \ },
-      \ 'component': {
-      \   'tagbar': '%{tagbar#currenttag("%s", "", "f")}',
+      \ 'component_expand': {
+      \   'buffercurrent': 'lightline#buffer#buffercurrent2',
+      \ },
+      \ 'component_type': {
+      \   'buffercurrent': 'tabsel',
       \ },
       \ 'component_function': {
       \   'modified': 'LightlineModified',
@@ -329,6 +334,13 @@ let g:lightline = {
       \   'filetype': 'LightlineFiletype',
       \   'fileencoding': 'LightlineFileencoding',
       \   'mode': 'LightlineMode',
+      \   'bufferbefore': 'lightline#buffer#bufferbefore',
+      \   'bufferafter': 'lightline#buffer#bufferafter',
+      \   'bufferinfo': 'lightline#buffer#bufferinfo',
+      \ },
+      \ 'tabline': {
+      \   'left': [ [ 'bufferinfo' ], [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
+      \   'right': [ [ 'close' ], ],
       \ },
       \ 'separator': { 'left': '⮀', 'right': '⮂' },
       \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
@@ -374,6 +386,29 @@ endfunction
 function! LightlineMode()
   return winwidth(0) > 60 ? lightline#mode() : ''
 endfunction=
+
+" lightline-buffer settings
+let g:lightline_buffer_logo = ' '
+let g:lightline_buffer_readonly_icon = ''
+let g:lightline_buffer_modified_icon = '✭'
+let g:lightline_buffer_git_icon = ' '
+let g:lightline_buffer_ellipsis_icon = '..'
+let g:lightline_buffer_expand_left_icon = '◀ '
+let g:lightline_buffer_expand_right_icon = ' ▶'
+let g:lightline_buffer_active_buffer_left_icon = ''
+let g:lightline_buffer_active_buffer_right_icon = ''
+let g:lightline_buffer_separator_icon = ' '
+
+let g:lightline_buffer_show_bufnr = 1
+let g:lightline_buffer_rotate = 0
+let g:lightline_buffer_fname_mod = ':t'
+let g:lightline_buffer_excludes = ['vimfiler']
+
+let g:lightline_buffer_maxflen = 30
+let g:lightline_buffer_maxfextlen = 3
+let g:lightline_buffer_minflen = 16
+let g:lightline_buffer_minfextlen = 3
+let g:lightline_buffer_reservelen = 20
 "===============================================================================
 " Cscope
 "===============================================================================
@@ -426,6 +461,8 @@ let g:rooter_use_lcd = 1
 "===============================================================================
 let g:OmniSharp_server_type = 'v1'
 let g:OmniSharp_server_type = 'roslyn'
+
+let g:OmniSharp_selector_ui = 'fzf'    " Use fzf.vim
 "===============================================================================
 
 nmap <F7> :SrcExplToggle<CR>
@@ -478,3 +515,5 @@ nnoremap tn :tnext<CR>
 nnoremap tp :tprev<CR>
 nnoremap ]n :tabnext<CR>
 nnoremap [p :tabprev<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprev<CR>

@@ -134,8 +134,13 @@ if [ ! -d ~/.bash_it ]; then
   ~/.bash_it/install.sh --no-modify-config
 fi
 
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 if [ "$PLATFORM" = Linux ]; then
-  PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\h\[\e[1;30m\]:"
+#  PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\h\[\e[1;30m\]:"
+  PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\[\e[1;30m\]:"
   PS1="$PS1\[\e[0;38m\]\w\[\e[1;35m\]> \[\e[0m\]"
 else
   ### git-prompt
@@ -145,7 +150,8 @@ else
   fi
   # PROMPT_COMMAND='history -a; history -c; history -r; printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(__git_ps1) ($(date +%m/%d\ %H:%M:%S))"'
   PROMPT_COMMAND='history -a; printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(__git_ps1) ($(date +%m/%d\ %H:%M:%S))"'
-  PS1="\[\e[34m\]\u\[\e[1;32m\]@\[\e[0;33m\]\h\[\e[35m\]:"
+#  PS1="\[\e[34m\]\u\[\e[1;32m\]@\[\e[0;33m\]\h\[\e[35m\]:"
+  PS1="\[\e[34m\]\u\[\e[1;32m\]@\[\e[0;33m\]\[\e[35m\]:"
   PS1="$PS1\[\e[m\]\w\[\e[1;31m\]> \[\e[0m\]"
 fi
 
@@ -404,3 +410,8 @@ mkcscope() {
     find . \( -name '*.c' -o -name '*.cpp' -o -name '*.cc' -o -name '*.h' \) -print > cscope.files
     cscope -i cscope.files
 }
+
+alias ag='ag --path-to-agignore ~/.agignore'
+
+export GOPATH=~/workspace/go
+export PATH=$PATH:$GOPATH/bin
